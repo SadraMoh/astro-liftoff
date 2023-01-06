@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Debug } from "astro/components";
+// import { todos } from "../assets/todos.json";
+
+const { todos } = await fetch("https://dummyjson.com/todos").then((res) =>
+  res.json()
+);
+---
+
+<Layout title="todos">
+  <div class="todos">
+    <header>
+      <h1>Todos</h1>
+      <span>{todos.length} total</span>
+    </header>
+    <main>
+      <ul>
+        {
+          todos.map((todo) => (
+            <li>
+              <input type="checkbox" checked={todo.completed} />
+              <span>{todo.todo}</span>
+              <a href={`/todo/${todo.id}`}>view</a>
+            </li>
+          ))
+        }
+      </ul>
+    </main>
+  </div>
+</Layout>

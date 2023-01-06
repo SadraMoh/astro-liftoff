@@ -1,0 +1,28 @@
+---
+import Debug from "astro/components/Debug.astro";
+import Layout from "../../layouts/Layout.astro";
+import { Todo } from "../../model/todo";
+
+export async function getStaticPaths() {
+  const { todos } = await fetch("https://dummyjson.com/todos").then((res) =>
+    res.json()
+  );
+
+  return todos.map((todo: Todo) => ({
+    params: { id: todo.id },
+    props: { todo },
+  }));
+}
+
+export interface Props {
+  todo: Todo;
+}
+
+const { todo } = Astro.props;
+---
+
+<Layout title={"todo " + todo.id}>
+  <h1>#{todo.id} {todo.todo}</h1>
+
+  {todo.completed ? <strong>Completed</strong> : <small>Not Completed</small>}
+</Layout>
